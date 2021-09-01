@@ -3,6 +3,9 @@ package com.example.restEx;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Version;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Employee {
@@ -11,9 +14,10 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private String description;
-	public Employee() {
-		super();
-	}
+	
+	private @Version @JsonIgnore Long version;
+	
+	public Employee() {	}
 	public Employee(String firstName, String lastName, String description) {
 		super();
 		this.firstName = firstName;
@@ -44,6 +48,13 @@ public class Employee {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public Long getVersion() {
+		return version;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,6 +63,7 @@ public class Employee {
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
 	@Override
@@ -83,13 +95,20 @@ public class Employee {
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
+		if (version == null) {
+			if (other.version != null)
+				return false;
+		} else if (!version.equals(other.version))
+			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", description="
-				+ description + "]";
+				+ description + ", version=" + version + "]";
 	}
+	
+	
 	
 	
 }
