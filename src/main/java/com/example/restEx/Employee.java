@@ -1,8 +1,11 @@
 package com.example.restEx;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,101 +17,96 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private String description;
-	
+
 	private @Version @JsonIgnore Long version;
-	
-	public Employee() {	}
-	public Employee(String firstName, String lastName, String description) {
-		super();
+
+	private @ManyToOne Manager manager; // <1>
+
+	private Employee() {}
+
+	public Employee(String firstName, String lastName, String description, Manager manager) { // <2>
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.description = description;
+		this.manager = manager;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Employee employee = (Employee) o;
+		return Objects.equals(id, employee.id) &&
+			Objects.equals(firstName, employee.firstName) &&
+			Objects.equals(lastName, employee.lastName) &&
+			Objects.equals(description, employee.description) &&
+			Objects.equals(version, employee.version) &&
+			Objects.equals(manager, employee.manager);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(id, firstName, lastName, description, version, manager);
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public Long getVersion() {
 		return version;
 	}
+
 	public void setVersion(Long version) {
 		this.version = version;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((version == null) ? 0 : version.hashCode());
-		return result;
+
+	public Manager getManager() {
+		return manager;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Employee other = (Employee) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (version == null) {
-			if (other.version != null)
-				return false;
-		} else if (!version.equals(other.version))
-			return false;
-		return true;
+
+	public void setManager(Manager manager) {
+		this.manager = manager;
 	}
+
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", description="
-				+ description + ", version=" + version + "]";
+		return "Employee{" +
+			"id=" + id +
+			", firstName='" + firstName + '\'' +
+			", lastName='" + lastName + '\'' +
+			", description='" + description + '\'' +
+			", version=" + version +
+			", manager=" + manager +
+			'}';
 	}
-	
-	
-	
-	
 }
